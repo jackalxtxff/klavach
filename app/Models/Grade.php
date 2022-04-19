@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Grade extends Model
+{
+    use HasFactory;
+
+    protected $table = 'grades';
+    protected $guarded = false;
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function dictionary() {
+        return $this->belongsTo(Dictionary::class, 'dictionary_id', 'id');
+    }
+}
