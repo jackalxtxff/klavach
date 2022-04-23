@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes(['verify' => true]);
+
 Route::get('/', function () {
     return view('user.pages.index');
 })->name('main');
@@ -43,9 +45,6 @@ Route::get('/profile/{name}/history', [ProfileController::class, 'showHistory'])
 Route::get('/profile/{name}/settings', [ProfileController::class, 'edit'])->name('profile.settings');
 Route::put('/profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
