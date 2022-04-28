@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\CommentController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,4 +74,9 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         ],
         'as' => 'dictionaries'
     ]);
+});
+
+//Для хостинга для создания линка
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
 });

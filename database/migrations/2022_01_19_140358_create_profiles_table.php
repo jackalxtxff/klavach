@@ -18,6 +18,7 @@ class CreateProfilesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('about')->nullable();
             $table->string('photo')->nullable();
+            $table->string('local_photo')->nullable();
             $table->float('record_speed')->nullable()->default(0);
             $table->float('avg_speed')->nullable()->default(0);
             $table->integer('count_games')->nullable()->default(0);

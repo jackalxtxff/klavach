@@ -5790,17 +5790,27 @@ $('input[name="img-input"]').change(function () {
     cropperDestroy();
   }
 
-  if (this.files && this.files[0]) {
-    var reader = new FileReader();
+  var file = this.files[0];
+  var ext = "не определилось";
+  var parts = file.name.split('.');
+  if (parts.length > 1) ext = parts.pop();
+  var types = ['jpeg', 'png', 'jpg', 'gif'];
 
-    reader.onload = function (e) {
-      $('#image').attr('src', e.target.result);
-    };
+  if (types.includes(ext)) {
+    if (this.files && this.files[0]) {
+      var reader = new FileReader();
 
-    reader.readAsDataURL(this.files[0]);
+      reader.onload = function (e) {
+        $('#image').attr('src', e.target.result);
+      };
+
+      reader.readAsDataURL(this.files[0]);
+    }
+
+    cropperInit();
+  } else {
+    $('input[name="img-input"]').val(null);
   }
-
-  cropperInit();
 });
 $('#image-modal').on('shown.bs.modal', function () {
   if ($('#image').attr('src') != '') {

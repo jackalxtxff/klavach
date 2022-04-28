@@ -303,14 +303,15 @@ class ProfileController extends Controller
             }
             else if ($request->file('image')) {
                 if ($user->profile->photo != null) {
-                    Storage::delete($user->profile->photo);
+                    Storage::delete($user->profile->local_photo);
                 }
 
-                $path = $request->file('image')->store('public/users/' . $user->id);
-                $path = Storage::url($path);
+                $local_path = $request->file('image')->store('public/users/' . $user->id);
+                $path = Storage::url($local_path);
 
                 $user->profile()->update([
-                    'photo' => $path
+                    'photo' => $path,
+                    'local_photo' => $local_path
                 ]);
 
                 return response()->json([
@@ -336,7 +337,7 @@ class ProfileController extends Controller
             ], 422);
         }
 
-        Storage::delete($user->profile->photo);
+        Storage::delete($user->profile->local_photo);
 
         $user->profile()->update([
             'photo' => null

@@ -492,15 +492,24 @@ $('input[name="img-input"]').change(function () {
         cropperDestroy();
     }
 
-    if (this.files && this.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            $('#image').attr('src', e.target.result);
+    let file = this.files[0];
+    let ext = "не определилось";
+    let parts = file.name.split('.');
+    if (parts.length > 1) ext = parts.pop();
+    let types = ['jpeg', 'png', 'jpg', 'gif'];
+    if (types.includes(ext)) {
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $('#image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
         }
-        reader.readAsDataURL(this.files[0]);
+        cropperInit();
     }
-
-    cropperInit();
+    else {
+        $('input[name="img-input"]').val(null);
+    }
 });
 
 $('#image-modal').on('shown.bs.modal', function () {

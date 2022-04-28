@@ -180,7 +180,7 @@
                                 <h5 class="ps-0">Импорт</h5>
                                 <div>
                                     <label for="formFileSm" class="form-label">Изображения в формате JPEG, PNG или GIF до 2МБ.</label>
-                                    <input class="form-control form-control-sm" id="formFileSm" name="img-input" type="file">
+                                    <input class="form-control form-control-sm" id="formFileSm" name="img-input" type="file" accept="image/gif, image/jpeg, image/png">
                                 </div>
                             </div>
                         </div>
