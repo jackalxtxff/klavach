@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DictionaryAdminController;
+use App\Http\Controllers\Admin\ReportAdminController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProfileController;
@@ -73,6 +74,12 @@ Route::prefix('admin')->middleware('admin')->group(function () {
             'index' => 'admin.dictionaries.index'
         ],
         'as' => 'dictionaries'
+    ]);
+    Route::get('/reports/{report}/getReport', [ReportAdminController::class, 'getReport'])->name('admin.reports.getReport');
+    Route::resource('reports', ReportAdminController::class, [
+        'names' => [
+            'update' => 'admin.reports.update'
+        ]
     ]);
 });
 

@@ -93,6 +93,7 @@ class GameController extends Controller
     {
         $dictionary = Dictionary::with('user')
             ->with('language')
+            ->where('is_systemic', 1)
             ->inRandomOrder()
             ->first();
 
@@ -172,9 +173,21 @@ class GameController extends Controller
      */
     public function show(Dictionary $dictionary)
     {
-        $dictionary = Dictionary::with('user')
+        $dictionary = Dictionary::with('user', 'report')
             ->where('id', $dictionary->id)
             ->first();
+
+        if ($dictionary->is_publish == 0) {
+            if (Auth::id() != $dictionary->user_id) {
+                return abort(403);
+            }
+        }
+
+        if ($dictionary->report->status_code != 'accept') {
+            if (Auth::id() != $dictionary->user_id) {
+                return abort(403);
+            }
+        }
 
         return view('user.pages.training.training', [
             'dictionary' => $dictionary

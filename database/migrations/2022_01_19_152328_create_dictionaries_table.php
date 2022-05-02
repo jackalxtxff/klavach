@@ -17,7 +17,7 @@ class CreateDictionariesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->boolean('is_publish');
-            $table->boolean('is_moderation');
+            $table->boolean('is_systemic')->default(0);
             $table->string('title', 70);
             $table->string('description', 300);
             $table->string('information', 1000);

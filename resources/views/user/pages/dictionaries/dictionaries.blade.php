@@ -3,7 +3,7 @@
 @section('title', 'Словари')
 
 @section('content')
-    <section class="main mt-4">
+    <section class="main mt-4 user-wrapper">
         <div class="container">
             <div class="row dictionaries-section" data-uri="{{route('dictionaries.index')}}">
                 <div class="col-12 col-md-3">

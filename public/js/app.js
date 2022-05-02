@@ -5251,15 +5251,220 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/admin/ajaxFilter.js":
+/*!******************************************!*\
+  !*** ./resources/js/admin/ajaxFilter.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
+
+
+
+ // var modal = new bootstrap.Modal(document.getElementById('report-modal'));
+//Фильтры (дефолт страница 1) для админа
+
+function ajaxFilterAdmin() {
+  var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  var uri = $('.dictionaries-section').data('uri');
+  var data = {
+    type: $('input[name="type-sort"]:checked').data('value'),
+    chapter: $('input[name="chapter"]:checked').data('value'),
+    search: $('input[name="search"]').val(),
+    direction: $('input[name="direction"]').is(':checked') ? 'asc' : 'desc',
+    page: page
+  };
+  var newUri = "".concat(uri, "?chapter=").concat(data.chapter, "&type=").concat(data.type, "&search=").concat(data.search, "&page=").concat(data.page, "&&direction=").concat(data.direction);
+  history.replaceState(null, null, newUri);
+  console.log(data, uri, newUri);
+  $.ajax({
+    url: "".concat(uri),
+    type: 'GET',
+    data: {
+      type: data.type,
+      chapter: data.chapter,
+      search: data.search,
+      direction: data.direction,
+      page: data.page
+    },
+    headers: {
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
+    },
+    success: function success(data) {
+      console.log(data);
+      $('.dictionaries-container').html(data.view);
+    },
+    error: function error(data) {
+      console.log(data);
+    }
+  });
+} //Передача страницы в функцию фильтра при нажатии на пагинаторы
+
+
+$(document).on('click', '.dictionaries-section .pagination a', function (e) {
+  e.preventDefault();
+  $('.pagination li').removeClass('active');
+  $(this).parent('li').addClass('active');
+  var page = $(this).attr('href').split('page=')[1];
+  ajaxFilterAdmin(page);
+}); //Фильтр при нажатии на радио батон
+
+$('.admin-wrapper .dictionaries-section input[type="radio"]').click(function () {
+  ajaxFilterAdmin();
+}); //Фильтр по вхождению при нажатии кнопки Enter
+
+$('.admin-wrapper .dictionaries-section input[type="search"]').keydown(function (e) {
+  if (e.keyCode === 13) {
+    ajaxFilterAdmin();
+  }
+}); //Фильтр по вхождению при нажатии кнопки Search
+
+$('.admin-wrapper .dictionaries-section .search-btn').click(function () {
+  ajaxFilterAdmin();
+}); //Фильтр по нажатию чекбокса
+
+$('.admin-wrapper .dictionaries-section input[type="checkbox"]').click(function () {
+  ajaxFilterAdmin();
+
+  if ($('input[name="direction"]').is(':checked')) {
+    $('i').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+  } else {
+    $('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+  }
+});
+var method, uri, sendData; //Кнопки доступа (принять/отказ)
+
+$(document).on('click', '.btn-container .access-btn', function (e) {
+  var _this = this;
+
+  e.preventDefault();
+  method = $(this).data('method');
+  uri = $(this).data('uri');
+  sendData = {
+    id: $(this).data('id'),
+    type: $(this).data('type')
+  };
+  console.log(1, sendData, uri);
+  var response;
+
+  if (sendData.type === "accept" || sendData.type === "wait") {
+    $.ajax({
+      url: "".concat(uri),
+      type: method,
+      data: {
+        id: sendData.id,
+        type: sendData.type
+      },
+      headers: {
+        'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
+      },
+      success: function success(data) {
+        console.log(data);
+        response = data;
+        _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
+          message: response.message
+        });
+        $(_this).parent('.btn-container').html(data.view);
+      },
+      error: function error(data) {
+        response = data.responseJSON;
+        console.log(response);
+        _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
+          message: response.message
+        });
+      }
+    });
+  } else if (sendData.type === "deny") {
+    $.ajax({
+      url: $(this).data('repuri'),
+      type: 'GET',
+      headers: {
+        'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
+      },
+      success: function success(data) {
+        $('#report-modal textarea[name="report"]').val(data.report.report);
+        console.log(data);
+      },
+      error: function error(data) {
+        console.log(data);
+      }
+    }); // $('#report-modal').show();
+  }
+});
+$(document).on('click', '.modal .access-btn', function (e) {
+  e.preventDefault();
+  var report = $('textarea[name="report"]').val();
+  var response;
+  $.ajax({
+    url: "".concat(uri),
+    type: method,
+    data: {
+      id: sendData.id,
+      type: sendData.type,
+      report: report
+    },
+    headers: {
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
+    },
+    success: function success(data) {
+      console.log(data);
+      response = data;
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
+        message: response.message
+      });
+      $(document).find(".btn-container[data-id=\"".concat(sendData.id, "\"]")).html(data.view);
+      $('#report-modal').modal('hide');
+    },
+    error: function error(data) {
+      response = data.responseJSON;
+      console.log(response);
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
+        message: response.message
+      });
+      $.each(response.errors, function (key, value) {
+        $(".form-control[name=\"".concat(key, "\"]")).addClass('is-invalid');
+        $(".invalid-feedback[for=\"".concat(key, "\"]")).text(value).addClass('d-block');
+      });
+    }
+  });
+});
+$('#report-modal').on('hidden.bs.modal', function () {
+  $(".form-control[name=\"report\"]").removeClass('is-invalid');
+  $(".invalid-feedback[for=\"report\"]").removeClass('d-block');
+  $('textarea[name="report"]').val('');
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "notyf": () => (/* binding */ notyf),
+/* harmony export */   "csrfToken": () => (/* binding */ csrfToken)
+/* harmony export */ });
+var notyf = new Notyf({
+  position: {
+    x: 'right',
+    y: 'top'
+  },
+  dismissible: true,
+  duration: 5000
+});
+var csrfToken = $('meta[name="csrf-token"]').attr('content'); // window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./general */ "./resources/js/general.js");
+
+__webpack_require__(/*! ./admin/ajaxFilter */ "./resources/js/admin/ajaxFilter.js");
 
 /***/ }),
 
@@ -5303,9 +5508,11 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!*********************************!*\
   !*** ./resources/js/general.js ***!
   \*********************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app */ "./resources/js/app.js");
 
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -5320,15 +5527,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var notyf = new Notyf({
-  position: {
-    x: 'right',
-    y: 'top'
-  },
-  dismissible: true,
-  duration: 5000
-});
-var csrfToken = $('meta[name="csrf-token"]').attr('content'); // $(document).$(document).on('click', '.pagination a', function(e) {
+
+ // $(document).$(document).on('click', '.pagination a', function(e) {
 //     e.preventDefault();
 // });
 //Добавление словаря в избранное
@@ -5353,12 +5553,12 @@ $(document).on('click', '.favorite-btn', function (e) {
       type: data.type
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       $(_this).parent('.btn-container').html(data.view);
@@ -5366,7 +5566,7 @@ $(document).on('click', '.favorite-btn', function (e) {
     error: function error(data) {
       response = data.responseJSON;
       console.log(response);
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5399,7 +5599,7 @@ function ajaxFilter() {
       page: data.page
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
@@ -5420,21 +5620,21 @@ $(document).on('click', '.dictionaries-section .pagination a', function (e) {
   ajaxFilter(page);
 }); //Фильтр при нажатии на радио батон
 
-$('.dictionaries-section input[type="radio"]').click(function () {
+$('.user-wrapper .dictionaries-section input[type="radio"]').click(function () {
   ajaxFilter();
 }); //Фильтр по вхождению при нажатии кнопки Enter
 
-$('.dictionaries-section input[type="search"]').keydown(function (e) {
+$('.user-wrapper .dictionaries-section input[type="search"]').keydown(function (e) {
   if (e.keyCode === 13) {
     ajaxFilter();
   }
 }); //Фильтр по вхождению при нажатии кнопки Search
 
-$('.dictionaries-section .search-btn').click(function () {
+$('.user-wrapper .dictionaries-section .search-btn').click(function () {
   ajaxFilter();
 }); //Фильтр по нажатию чекбокса
 
-$('.dictionaries-section input[type="checkbox"]').click(function () {
+$('.user-wrapper .dictionaries-section input[type="checkbox"]').click(function () {
   ajaxFilter();
 
   if ($('input[name="direction"]').is(':checked')) {
@@ -5479,6 +5679,7 @@ $('.form-dictionary').submit(function (e) {
     description: $('input[name="description"]').val(),
     information: $('input[name="information"]').val(),
     is_publish: $('select[name="is_publish"]').val(),
+    is_systemic: typeof $('select[name="is_systemic"]').val() === "undefined" ? 0 : $('select[name="is_systemic"]').val(),
     language: $('select[name="language"]').val(),
     type: $('input[name="type"]:checked').val(),
     text: $('textarea[name="text"]').val()
@@ -5492,18 +5693,19 @@ $('.form-dictionary').submit(function (e) {
       description: data.description,
       information: data.information,
       is_publish: data.is_publish,
+      is_systemic: data.is_systemic,
       language: data.language,
       type: data.type,
       text: data.text
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       $('.is-invalid').removeClass('is-invalid');
       $('.invalid-feedback').removeClass('d-block');
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       setTimeout(function () {
@@ -5519,7 +5721,7 @@ $('.form-dictionary').submit(function (e) {
         $(".form-control[name=\"".concat(key, "\"]")).addClass('is-invalid');
         $(".invalid-feedback[for=\"".concat(key, "\"]")).text(value).addClass('d-block');
       });
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5553,13 +5755,13 @@ $('.form-dictionary-update').submit(function (e) {
       text: data.text
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       $('.is-invalid').removeClass('is-invalid');
       $('.invalid-feedback').removeClass('d-block');
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       setTimeout(function () {
@@ -5575,7 +5777,7 @@ $('.form-dictionary-update').submit(function (e) {
         $(".form-control[name=\"".concat(key, "\"]")).addClass('is-invalid');
         $(".invalid-feedback[for=\"".concat(key, "\"]")).text(value).addClass('d-block');
       });
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5591,11 +5793,11 @@ $('.dictionary-destroy').click(function (e) {
     url: "".concat(uri),
     type: method,
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       setTimeout(function () {
@@ -5605,7 +5807,7 @@ $('.dictionary-destroy').click(function (e) {
     error: function error(data) {
       response = data.responseJSON;
       console.log(response);
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5629,12 +5831,12 @@ $('.rate-container input[name="rating"]').click(function () {
       dictionary: data.dictionary
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
     },
@@ -5642,7 +5844,7 @@ $('.rate-container input[name="rating"]').click(function () {
       response = data.responseJSON;
       console.log(response);
       $('.rate-container input[name="rating"]:checked').prop('checked', false);
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5670,12 +5872,12 @@ $('.change-password').click(function (e) {
       new_password_confirmation: data.new_password_confirmation
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
     },
@@ -5686,7 +5888,7 @@ $('.change-password').click(function (e) {
         $(".form-control[name=\"".concat(key, "\"]")).addClass('is-invalid');
         $(".invalid-feedback[for=\"".concat(key, "\"]")).text(value).addClass('d-block');
       });
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5708,12 +5910,12 @@ $('.change-name').click(function (e) {
       name: name
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
 
@@ -5736,7 +5938,7 @@ $('.change-name').click(function (e) {
         $(".form-control[name=\"".concat(key, "\"]")).addClass('is-invalid');
         $(".invalid-feedback[for=\"".concat(key, "\"]")).text(value).addClass('d-block');
       });
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5759,12 +5961,12 @@ $('.change-about').click(function (e) {
       about: about
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
     },
@@ -5775,7 +5977,7 @@ $('.change-about').click(function (e) {
         $(".form-control[name=\"".concat(key, "\"]")).addClass('is-invalid');
         $(".invalid-feedback[for=\"".concat(key, "\"]")).text(value).addClass('d-block');
       });
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5861,12 +6063,12 @@ $('.save-image').click(function () {
         processData: false,
         contentType: false,
         headers: {
-          'X-CSRF-TOKEN': csrfToken
+          'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
         },
         success: function success(data) {
           console.log(data);
           var response = data;
-          notyf.success({
+          _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
             message: response.message
           });
           $('#image-modal').modal('hide'); // $('#image').removeAttr('src');
@@ -5885,14 +6087,14 @@ $('.save-image').click(function () {
           $.each(response.errors, function (key, value) {
             errors.push(value);
           });
-          notyf.error({
+          _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
             message: errors
           });
         }
       });
     });
   } else {
-    notyf.error({
+    _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
       message: 'Вы не загрузили фотографию!'
     });
   }
@@ -5904,12 +6106,12 @@ $('.delete-image').click(function () {
     url: "".concat(uri),
     type: method,
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       var response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       $('#image').attr('src', '');
@@ -5924,7 +6126,7 @@ $('.delete-image').click(function () {
       $.each(response.errors, function (key, value) {
         errors.push(value);
       });
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: errors
       });
     }
@@ -5947,12 +6149,12 @@ $('.send-comment').click(function (e) {
       dictionary_id: sendData.dictionary_id
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       var response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       $('.small-comments-container').html(data.view);
@@ -5961,7 +6163,7 @@ $('.send-comment').click(function (e) {
     error: function error(data) {
       var response = data.responseJSON;
       console.log(response);
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -5989,12 +6191,12 @@ $('.comments').on('click', '.update-comment', function (e) {
         dictionary_id: sendData.dictionary_id
       },
       headers: {
-        'X-CSRF-TOKEN': csrfToken
+        'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
       },
       success: function success(data) {
         console.log(data);
         var response = data;
-        notyf.success({
+        _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
           message: response.message
         });
         $('.small-comments-container').html(data.view);
@@ -6005,7 +6207,7 @@ $('.comments').on('click', '.update-comment', function (e) {
       error: function error(data) {
         var response = data.responseJSON;
         console.log(response);
-        notyf.error({
+        _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
           message: response.message
         });
       }
@@ -6025,12 +6227,12 @@ $('.comments').on('click', '.delete-comment', function (e) {
       dictionary_id: id
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
       var response = data;
-      notyf.success({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.success({
         message: response.message
       });
       $('.small-comments-container').html(data.view);
@@ -6038,7 +6240,7 @@ $('.comments').on('click', '.delete-comment', function (e) {
     error: function error(data) {
       var response = data.responseJSON;
       console.log(response);
-      notyf.error({
+      _app__WEBPACK_IMPORTED_MODULE_0__.notyf.error({
         message: response.message
       });
     }
@@ -6063,7 +6265,7 @@ function recordsFilter() {
       page: data.page
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       console.log(data);
@@ -6106,7 +6308,7 @@ $('.play-game-btn').click(function (e) {
       dictionary: data.dictionary
     },
     headers: {
-      'X-CSRF-TOKEN': csrfToken
+      'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
     },
     success: function success(data) {
       var _ref;
@@ -6373,7 +6575,7 @@ function Game(arr, dictionary) {
         percent_mistakes: self.percentMistakes
       },
       headers: {
-        'X-CSRF-TOKEN': csrfToken
+        'X-CSRF-TOKEN': _app__WEBPACK_IMPORTED_MODULE_0__.csrfToken
       },
       success: function success(data) {
         console.log(data); //TODO: оценка словаря

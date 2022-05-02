@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Dictionary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DictionaryAdminController extends Controller
 {
@@ -13,9 +14,315 @@ class DictionaryAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.pages.dictionaries.dictionaries');
+        $paginate = 10;
+
+        // Если запрос от ajax
+        if ($request->ajax()) {
+            $direction = $request->direction;
+
+            //Раздел "Новые"
+            if ($request->chapter == 'new') {
+                //Тип все кроме "Любые"
+                if($request->type != 0) {
+                    $dictionaries = Dictionary::with('user', 'stats', 'report')
+                        ->with(['favorites' => function ($query) {
+                            return $query->where('user_id', Auth::id());
+                        }])
+                        ->where('type_id', $request->type)
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                        })
+                        ->join('users', 'dictionaries.user_id', 'users.id')
+                        ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                        ->whereHas('report', function ($query) use ($request) {
+                            return $query->where('status_code', $request->chapter)
+                                ->orWhere('status_code', 'wait');
+                        })
+                        ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                        ->orderBy('reports.created_at', $direction)
+                        ->select('dictionaries.*')
+                        ->paginate($paginate);
+                }
+                //Тип "Любые"
+                else {
+                    $dictionaries = Dictionary::with('user', 'stats', 'report')
+                        ->with(['favorites' => function ($query) {
+                            return $query->where('user_id', Auth::id());
+                        }])
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                        })
+                        ->join('users', 'dictionaries.user_id', 'users.id')
+                        ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                        ->whereHas('report', function ($query) use ($request) {
+                            return $query->where('status_code', $request->chapter)
+                                ->orWhere('status_code', 'wait');
+                        })
+                        ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                        ->orderBy('reports.created_at', $direction)
+                        ->select('dictionaries.*')
+                        ->paginate($paginate);
+                }
+            }
+            elseif ($request->chapter == 'accept') {
+                if($request->type != 0) {
+                    $dictionaries = Dictionary::with('user', 'stats', 'report')
+                        ->with(['favorites' => function ($query) {
+                            return $query->where('user_id', Auth::id());
+                        }])
+                        ->where('type_id', $request->type)
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                        })
+                        ->join('users', 'dictionaries.user_id', 'users.id')
+                        ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                        ->whereHas('report', function ($query) use ($request) {
+                            return $query->where('status_code', $request->chapter);
+                        })
+                        ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                        ->orderBy('reports.created_at', $direction)
+                        ->select('dictionaries.*')
+                        ->paginate($paginate);
+                }
+                else {
+                    $dictionaries = Dictionary::with('user', 'stats', 'report')
+                        ->with(['favorites' => function ($query) {
+                            return $query->where('user_id', Auth::id());
+                        }])
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                        })
+                        ->join('users', 'dictionaries.user_id', 'users.id')
+                        ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                        ->whereHas('report', function ($query) use ($request) {
+                            return $query->where('status_code', $request->chapter);
+                        })
+                        ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                        ->orderBy('reports.created_at', $direction)
+                        ->select('dictionaries.*')
+                        ->paginate($paginate);
+                }
+            }
+            elseif ($request->chapter == 'deny') {
+                if($request->type != 0) {
+                    $dictionaries = Dictionary::with('user', 'stats', 'report')
+                        ->with(['favorites' => function ($query) {
+                            return $query->where('user_id', Auth::id());
+                        }])
+                        ->where('type_id', $request->type)
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                        })
+                        ->join('users', 'dictionaries.user_id', 'users.id')
+                        ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                        ->whereHas('report', function ($query) use ($request) {
+                            return $query->where('status_code', $request->chapter);
+                        })
+                        ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                        ->orderBy('reports.created_at', $direction)
+                        ->select('dictionaries.*')
+                        ->paginate($paginate);
+                }
+                else {
+                    $dictionaries = Dictionary::with('user', 'stats', 'report')
+                        ->with(['favorites' => function ($query) {
+                            return $query->where('user_id', Auth::id());
+                        }])
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                        })
+                        ->join('users', 'dictionaries.user_id', 'users.id')
+                        ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                        ->whereHas('report', function ($query) use ($request) {
+                            return $query->where('status_code', $request->chapter);
+                        })
+                        ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                        ->orderBy('reports.created_at', $direction)
+                        ->select('dictionaries.*')
+                        ->paginate($paginate);
+                }
+            }
+
+            return response()->json([
+                'dictionaries' => $dictionaries,
+                'view' => view('admin.pages.dictionaries.ajax.dictionariesSorting', [
+                    'dictionaries' => $dictionaries
+                ])->render()
+            ]);
+        }
+
+
+        $direction = $request->direction;
+
+        // Загрузка страницы без ajax
+        $dictionaries = Dictionary::with('user', 'report')
+            ->where(function ($query) use ($request) {
+                $query->where('title', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                    ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+            })
+            ->join('users', 'dictionaries.user_id', 'users.id')
+            ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+            ->whereHas('report', function ($query) use ($request) {
+                return $query->where('status_code', 'new')
+                    ->orWhere('status_code', 'wait');
+            })
+            ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+            ->orderBy('reports.created_at', 'desc')
+            ->select('dictionaries.*')
+            ->paginate($paginate);
+
+        if ($request->chapter == 'new') {
+            //Тип все кроме "Любые"
+            if($request->type != 0) {
+                $dictionaries = Dictionary::with('user', 'stats', 'report')
+                    ->with(['favorites' => function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }])
+                    ->where('type_id', $request->type)
+                    ->where(function ($query) use ($request) {
+                        $query->where('title', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->join('users', 'dictionaries.user_id', 'users.id')
+                    ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                    ->whereHas('report', function ($query) use ($request) {
+                        return $query->where('status_code', $request->chapter)
+                            ->orWhere('status_code', 'wait');
+                    })
+                    ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                    ->orderBy('reports.created_at', $direction)
+                    ->select('dictionaries.*')
+                    ->paginate($paginate);
+            }
+            //Тип "Любые"
+            else {
+                $dictionaries = Dictionary::with('user', 'stats', 'report')
+                    ->with(['favorites' => function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }])
+                    ->where(function ($query) use ($request) {
+                        $query->where('title', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->join('users', 'dictionaries.user_id', 'users.id')
+                    ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                    ->whereHas('report', function ($query) use ($request) {
+                        return $query->where('status_code', $request->chapter)
+                            ->orWhere('status_code', 'wait');
+                    })
+                    ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                    ->orderBy('reports.created_at', $direction)
+                    ->select('dictionaries.*')
+                    ->paginate($paginate);
+            }
+        }
+        elseif ($request->chapter == 'accept') {
+            if($request->type != 0) {
+                $dictionaries = Dictionary::with('user', 'stats', 'report')
+                    ->with(['favorites' => function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }])
+                    ->where('type_id', $request->type)
+                    ->where(function ($query) use ($request) {
+                        $query->where('title', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->join('users', 'dictionaries.user_id', 'users.id')
+                    ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                    ->whereHas('report', function ($query) use ($request) {
+                        return $query->where('status_code', $request->chapter);
+                    })
+                    ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                    ->orderBy('reports.created_at', $direction)
+                    ->select('dictionaries.*')
+                    ->paginate($paginate);
+            }
+            else {
+                $dictionaries = Dictionary::with('user', 'stats', 'report')
+                    ->with(['favorites' => function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }])
+                    ->where(function ($query) use ($request) {
+                        $query->where('title', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->join('users', 'dictionaries.user_id', 'users.id')
+                    ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                    ->whereHas('report', function ($query) use ($request) {
+                        return $query->where('status_code', $request->chapter);
+                    })
+                    ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                    ->orderBy('reports.created_at', $direction)
+                    ->select('dictionaries.*')
+                    ->paginate($paginate);
+            }
+        }
+        elseif ($request->chapter == 'deny') {
+            if($request->type != 0) {
+                $dictionaries = Dictionary::with('user', 'stats', 'report')
+                    ->with(['favorites' => function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }])
+                    ->where('type_id', $request->type)
+                    ->where(function ($query) use ($request) {
+                        $query->where('title', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->join('users', 'dictionaries.user_id', 'users.id')
+                    ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                    ->whereHas('report', function ($query) use ($request) {
+                        return $query->where('status_code', $request->chapter);
+                    })
+                    ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                    ->orderBy('reports.created_at', $direction)
+                    ->select('dictionaries.*')
+                    ->paginate($paginate);
+            }
+            else {
+                $dictionaries = Dictionary::with('user', 'stats', 'report')
+                    ->with(['favorites' => function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }])
+                    ->where(function ($query) use ($request) {
+                        $query->where('title', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('users.name', 'LIKE', '%' . $request->search . '%');
+                    })
+                    ->join('users', 'dictionaries.user_id', 'users.id')
+                    ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
+                    ->whereHas('report', function ($query) use ($request) {
+                        return $query->where('status_code', $request->chapter);
+                    })
+                    ->join('reports', 'reports.dictionary_id', 'dictionaries.id')
+                    ->orderBy('reports.created_at', $direction)
+                    ->select('dictionaries.*')
+                    ->paginate($paginate);
+            }
+        }
+
+        return view('admin.pages.dictionaries.dictionaries', [
+            'dictionaries' => $dictionaries
+        ]);
     }
 
     /**

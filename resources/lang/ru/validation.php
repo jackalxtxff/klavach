@@ -169,7 +169,8 @@ return [
         'new_password' => 'новый пароль',
         'password_confirmation' => 'подтвердите пароль',
         'new_password_confirmation' => 'подтвердите пароль',
-        'image' => 'изображение'
+        'image' => 'изображение',
+        'report' => 'описание'
     ],
 
 ];

@@ -21,14 +21,17 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label pt-0">Автор</label>
                                     <div class="col-sm-10">
-                                        <div class="profile-img rounded align-middle" style="width: 20px; height: 20px; {{$dictionary->user->profile->photo == null ? null : 'background-color: transparent'}}">
-                                            @if($dictionary->user->profile->photo == null)
-                                                <i class="fas fa-user m-auto" style="font-size: 14px"></i>
-                                            @else
-                                                <img class="rounded" src="{{ $dictionary->user->profile->photo }}" alt="">
-                                            @endif
-                                        </div>
-                                        <a class="link-underline" href="{{route('profile.index', $dictionary->user->name)}}">{{$dictionary['user']['name']}}</a>
+                                        @if($dictionary->is_systemic == 1) <span>Cистемный</span> @endif
+                                        @if($dictionary->is_systemic == 0)
+                                            <div class="profile-img rounded align-middle" style="width: 20px; height: 20px; {{$dictionary->user->profile->photo == null ? null : 'background-color: transparent'}}">
+                                                @if($dictionary->user->profile->photo == null)
+                                                    <i class="fas fa-user m-auto" style="font-size: 14px"></i>
+                                                @else
+                                                    <img class="rounded" src="{{ $dictionary->user->profile->photo }}" alt="">
+                                                @endif
+                                            </div>
+                                            <a class="link-underline" href="{{route('profile.index', $dictionary->user->name)}}">{{$dictionary['user']['name']}}</a>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -58,7 +61,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label pt-0">Публичный</label>
                                     <div class="col-sm-10">
-                                        <p>Да</p>
+                                        <p>{{$dictionary['is_publish'] == 1 ? 'Да' : 'Нет'}}</p>
                                     </div>
                                 </div>
                                 <div class="row mb-3">

@@ -1,15 +1,7 @@
 "use strict";
 
-const notyf = new Notyf({
-    position: {
-        x: 'right',
-        y: 'top',
-    },
-    dismissible: true,
-    duration: 5000
-});
-
-const csrfToken = $('meta[name="csrf-token"]').attr('content');
+import { notyf } from "./app";
+import { csrfToken } from "./app";
 
 // $(document).$(document).on('click', '.pagination a', function(e) {
 //     e.preventDefault();
@@ -104,24 +96,24 @@ $(document).on('click', '.dictionaries-section .pagination a', function(e) {
 });
 
 //Фильтр при нажатии на радио батон
-$('.dictionaries-section input[type="radio"]').click(function () {
+$('.user-wrapper .dictionaries-section input[type="radio"]').click(function () {
     ajaxFilter();
 });
 
 //Фильтр по вхождению при нажатии кнопки Enter
-$('.dictionaries-section input[type="search"]').keydown(function (e) {
+$('.user-wrapper .dictionaries-section input[type="search"]').keydown(function (e) {
     if (e.keyCode === 13) {
         ajaxFilter();
     }
 });
 
 //Фильтр по вхождению при нажатии кнопки Search
-$('.dictionaries-section .search-btn').click(function () {
+$('.user-wrapper .dictionaries-section .search-btn').click(function () {
     ajaxFilter();
 });
 
 //Фильтр по нажатию чекбокса
-$('.dictionaries-section input[type="checkbox"]').click(function () {
+$('.user-wrapper .dictionaries-section input[type="checkbox"]').click(function () {
     ajaxFilter();
     if ($('input[name="direction"]').is(':checked')) {
         $('i').removeClass('fa-arrow-down').addClass('fa-arrow-up');
@@ -129,6 +121,8 @@ $('.dictionaries-section input[type="checkbox"]').click(function () {
         $('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
     }
 });
+
+
 
 
 //Установка описания типа словаря при выборе типа
@@ -166,6 +160,7 @@ $('.form-dictionary').submit(function(e) {
         description: $('input[name="description"]').val(),
         information: $('input[name="information"]').val(),
         is_publish: $('select[name="is_publish"]').val(),
+        is_systemic: typeof $('select[name="is_systemic"]').val() === "undefined" ? 0 : $('select[name="is_systemic"]').val(),
         language: $('select[name="language"]').val(),
         type: $('input[name="type"]:checked').val(),
         text: $('textarea[name="text"]').val()
@@ -180,6 +175,7 @@ $('.form-dictionary').submit(function(e) {
             description: data.description,
             information: data.information,
             is_publish: data.is_publish,
+            is_systemic: data.is_systemic,
             language: data.language,
             type: data.type,
             text: data.text

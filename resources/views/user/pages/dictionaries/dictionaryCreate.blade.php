@@ -1,3 +1,7 @@
+@php
+$user = \App\Models\User::where('id', \Illuminate\Support\Facades\Auth::id())->first();
+@endphp
+
 @extends('user.templates.template')
 @section('title', 'Создание словаря')
 
@@ -53,6 +57,22 @@
                                         Looks good!
                                     </div>
                                 </div>
+                                @if ($user->role == 'admin')
+                                    <div class="row mb-3">
+                                        <label for="is_systemic" class="col-sm-2 col-form-label">Системный</label>
+                                        <div class="col-sm-10">
+                                            <select id="is_systemic" name="is_systemic" class="form-select"
+                                                    aria-label="Default select example" style="width: 80px">
+                                                <option selected value="1">Да</option>
+                                                <option value="0">Нет</option>
+                                            </select>
+                                            <div class="form-text">Системные словари указываются как системные</div>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="row mb-3">
                                     <label for="is_publish" class="col-sm-2 col-form-label">Язык</label>
                                     <div class="col-sm-10">

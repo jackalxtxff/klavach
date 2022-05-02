@@ -7,16 +7,20 @@
                         href="{{route('dictionaries.show', $dictionary['id'])}}">{{$dictionary['title']}}</a></h5>
                 <p class="dictionary-description mb-0">{{\Illuminate\Support\Str::limit($dictionary['description'], 100)}}</p>
                 <p class="dictionary-author mb-0 d-inline">
-                    Автор:
-                <div class="profile-img rounded align-middle" style="width: 20px; height: 20px; {{$dictionary->user->profile->photo == null ? null : 'background-color: transparent'}}">
-                    @if($dictionary->user->profile->photo == null)
-                        <i class="fas fa-user m-auto" style="font-size: 14px"></i>
-                    @else
-                        <img class="rounded" src="{{ $dictionary->user->profile->photo }}" alt="">
-                    @endif
+                    Автор: @if($dictionary->is_systemic == 1) <span>Cистемный</span> @endif
+                @if($dictionary->is_systemic == 0)
+                    <div class="profile-img rounded align-middle"
+                         style="width: 20px; height: 20px; {{$dictionary->user->profile->photo == null ? null : 'background-color: transparent'}}">
+                        @if($dictionary->user->profile->photo == null)
+                            <i class="fas fa-user m-auto" style="font-size: 14px"></i>
+                        @else
+                            <img class="rounded" src="{{ $dictionary->user->profile->photo }}" alt="">
+                        @endif
                     </div>
-                <a class="link-underline" href="{{route('profile.index', $dictionary->user->name)}}">{{$dictionary['user']['name']}}</a>
-                </p>
+                    <a class="link-underline"
+                       href="{{route('profile.index', $dictionary->user->name)}}">{{$dictionary['user']['name']}}</a>
+                    @endif
+                    </p>
             </div>
             <div class="col-3">
                 <p class="dictionary-grade mb-0"><span
@@ -31,7 +35,8 @@
                             ">{{round($dictionary['stats']['avg_grade'], 1)}}</span><span
                         class="dictionary-count-comment">100</span> комментариев</p>
                 <p class="dictionary-difficulty mb-0">Сложность: <span>сложная</span></p>
-                <p class="dictionary-speed mb-0">Средняя скорость: <span>{{round($dictionary['stats']['avg_speed'])}}</span> зн/мин</p>
+                <p class="dictionary-speed mb-0">Средняя скорость:
+                    <span>{{round($dictionary['stats']['avg_speed'])}}</span> зн/мин</p>
             </div>
         </div>
     </div>

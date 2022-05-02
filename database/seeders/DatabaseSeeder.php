@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'ArtemBashorin',
             'email' => 'mar.adamson.29@gmail.com',
             'password' => Hash::make('qwaszxcv1'),
+            'email_verified_at' => now(),
             'role' => 'admin'
         ]);
         Profile::create([

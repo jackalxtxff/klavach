@@ -48,4 +48,8 @@ class Dictionary extends Model
     public function stats() {
         return $this->hasOne(Stats::class);
     }
+
+    public function report() {
+        return $this->hasOne(Report::class, 'dictionary_id', 'id');
+    }
 }
