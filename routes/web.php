@@ -59,6 +59,7 @@ Route::post('/training', [GameController::class, 'store'])->name('training.store
 Route::get('/dictionaries/sorting', [DictionaryController::class, 'sorting'])->name('dictionaries.sorting');
 //Route::post('/dictionaries/{id}', [DictionaryController::class, 'sendComment'])->name('dictionaries.comment');
 Route::get('/dictionaries/{dictionary}/records', [DictionaryController::class, 'showRecords'])->name('dictionaries.showRecords');
+Route::get('/dictionaries/{dictionary}/comments', [DictionaryController::class, 'showComments'])->name('dictionaries.showComments');
 Route::resource('dictionaries', DictionaryController::class);
 Route::get('/user/{username}', [ProfileController::class, 'getProfile'])->name('profile.id');
 
@@ -83,7 +84,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     ]);
 });
 
-//Для хостинга для создания линка
-Route::get('/linkstorage', function () {
-    Artisan::call('storage:link');
-});
+//Для хостинга для создания линка ком артизан
+//Route::get('/linkstorage', function () {
+//    Artisan::call('storage:link');
+//});

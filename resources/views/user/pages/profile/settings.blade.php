@@ -4,7 +4,7 @@
 
 @section('content')
     <section class="main mt-4">
-        <div class="container">
+        <div class="container-lg">
             <div class="row">
                 <div class="col-12 col-md-9 offset-md-3 mb-4">
                     @include('user.pages.profile.components.profile-header')
@@ -72,11 +72,11 @@
                                         <label for="email" class="form-label">Электронная почта</label>
                                         <div class="input-group has-validation">
                                             <input type="text" class="form-control" id="email" name="email"
-                                                   aria-describedby="inputGroupPrepend" placeholder="example@company.com" required="" value="{{$user->email}}">
+                                                   aria-describedby="inputGroupPrepend" placeholder="example@company.com" disabled value="{{$user->email}}">
                                             <div class="invalid-feedback">
                                                 Please choose a username.
                                             </div>
-                                            <button class="btn btn-primary change-email" type="submit">Изменить</button>
+                                            <button class="btn btn-primary change-email" disabled type="submit">Изменить</button>
                                         </div>
                                     </div>
                                 </div>

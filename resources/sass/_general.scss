@@ -49,6 +49,10 @@ a {
 .category-container {
     margin-top: 55px;
 
+    @media (max-width: 992px) {
+        margin-top: 0px;
+    }
+
     .list-group-item {
         border: 0;
     }
@@ -446,4 +450,8 @@ a {
 
 input[name="sortRecords"]:checked+label {
     color: rgba(var(--bs-dark-rgb),var(--bs-text-opacity))!important;
+}
+
+.dropdown-menu[data-bs-popper] {
+    left: -100px;
 }

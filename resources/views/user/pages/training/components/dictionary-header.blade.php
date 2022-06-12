@@ -33,8 +33,7 @@
                             bg-success
 @endif
                             ">{{round($dictionary['stats']['avg_grade'], 1)}}</span><span
-                        class="dictionary-count-comment">100</span> комментариев</p>
-                <p class="dictionary-difficulty mb-0">Сложность: <span>сложная</span></p>
+                        class="dictionary-count-comment">{{count($dictionary->comments)}}</span> комментариев</p>
                 <p class="dictionary-speed mb-0">Средняя скорость:
                     <span>{{round($dictionary['stats']['avg_speed'])}}</span> зн/мин</p>
             </div>

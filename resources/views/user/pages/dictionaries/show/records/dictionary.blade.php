@@ -3,7 +3,7 @@
 
 @section('content')
     <section class="main mt-4 dictionary">
-        <div class="container">
+        <div class="container-lg">
             <div class="d-flex">
                 <h1 class="me-auto">{{$dictionary['title']}}</h1>
                 <div class="btn-container">

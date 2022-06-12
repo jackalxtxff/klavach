@@ -1,12 +1,13 @@
+ps
 @extends('user.templates.template')
 @section('title', 'Регистрация')
 
 @section('content')
     <section class="main mt-4">
-        <div class="container">
+        <div class="container-lg">
             <div class="row justify-content-center">
                 <h1 class="text-center">Регистрация</h1>
-                <div class="col-12 col-md-5">
+                <div class="col-12 col-md-7 col-lg-6 col-xl-5">
                     <div class="card p-3">
                         <div class="card-body">
                             <form method="POST" action="{{ route('register') }}">

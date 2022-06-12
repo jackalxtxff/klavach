@@ -4,7 +4,7 @@
 
 @section('content')
     <section class="main mt-4">
-        <div class="container">
+        <div class="container-lg">
             <div class="row">
                 <div class="col-12 col-md-9 offset-md-3 mb-4">
                     @include('user.pages.profile.components.profile-header')

@@ -9,13 +9,13 @@
                         <i class="fas fa-chart-area me-2"></i>Обзор
                     </button>
                 </a>
-                <a href="{{route('profile.stats', $user->name)}}">
-                    <button type="button"
-                            class="list-group-item list-group-item-action {{request()->routeIs('profile.stats') ? 'active' : null}}"
-                            aria-current="true">
-                        <i class="fas fa-chart-area me-2"></i>Статистика
-                    </button>
-                </a>
+{{--                <a href="{{route('profile.stats', $user->name)}}">--}}
+{{--                    <button type="button"--}}
+{{--                            class="list-group-item list-group-item-action {{request()->routeIs('profile.stats') ? 'active' : null}}"--}}
+{{--                            aria-current="true">--}}
+{{--                        <i class="fas fa-chart-area me-2"></i>Статистика--}}
+{{--                    </button>--}}
+{{--                </a>--}}
                 <a href="{{route('profile.history', $user->name)}}">
                     <button type="button"
                             class="list-group-item list-group-item-action {{request()->routeIs('profile.history') ? 'active' : null}}">

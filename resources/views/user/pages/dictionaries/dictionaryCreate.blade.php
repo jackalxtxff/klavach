@@ -7,7 +7,7 @@ $user = \App\Models\User::where('id', \Illuminate\Support\Facades\Auth::id())->f
 
 @section('content')
     <section class="main mt-4">
-        <div class="container">
+        <div class="container-lg">
             <h1>Cоздание словаря</h1>
             <div class="row">
                 <div class="col-12">
@@ -112,13 +112,13 @@ $user = \App\Models\User::where('id', \Illuminate\Support\Facades\Auth::id())->f
                                             </label>
                                             <div class="form-text">Цельные тексты, разделяемые пустой строкой</div>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input type-dict" type="radio" name="type" value="4" id="book">
-                                            <label class="form-check-label" for="book">
-                                                Книга
-                                            </label>
-                                            <div class="form-text">Загрузка своего файла. Отрывки из файла будут браться в последовательном порядке</div>
-                                        </div>
+{{--                                        <div class="form-check">--}}
+{{--                                            <input class="form-check-input type-dict" type="radio" name="type" value="4" id="book" disabled>--}}
+{{--                                            <label class="form-check-label" for="book">--}}
+{{--                                                Книга--}}
+{{--                                            </label>--}}
+{{--                                            <div class="form-text">Загрузка своего файла. Отрывки из файла будут браться в последовательном порядке</div>--}}
+{{--                                        </div>--}}
                                     </div>
                                     <div class="valid-feedback">
                                         Looks good!
@@ -127,7 +127,7 @@ $user = \App\Models\User::where('id', \Illuminate\Support\Facades\Auth::id())->f
                                 <div class="row mb-3">
                                     <label for="content" class="col-sm-2 col-form-label">Содержание</label>
                                     <div class="col-sm-10">
-                                        <textarea class="form-control" id="text" name="text" placeholder=""></textarea>
+                                        <textarea class="form-control" id="text" name="text" placeholder="" rows="5"></textarea>
                                         <div class="form-text textarea-subtitle content-standard">Содержимое словаря</div>
                                         <div class="form-text textarea-subtitle content-words d-none">
                                             Список слов, из которых будет составляться текст. Допускаются русские и латинские символы, знаки препинания. Слова разделяются пробелом. Минимум 3 слова.<br>

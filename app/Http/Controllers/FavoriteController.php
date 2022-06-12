@@ -139,8 +139,16 @@ class FavoriteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favorite $favorite, Request $request)
+    public function destroy($favorite, Request $request)
     {
+        try {
+            $favorite = Favorite::findOrFail($favorite);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'error',
+                'message' => 'Вы уже убрали этот словарь. Обновите страницу!'
+            ], 402);
+        }
         if ($favorite->delete()) {
             $dictionary = Dictionary::where('id', $favorite->dictionary_id)
                 ->with(['favorites' => function ($query) {

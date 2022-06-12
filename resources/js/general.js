@@ -87,7 +87,7 @@ function ajaxFilter (page= 1) {
 }
 
 //Передача страницы в функцию фильтра при нажатии на пагинаторы
-$(document).on('click', '.dictionaries-section .pagination a', function(e) {
+$(document).on('click', '.user-wrapper .dictionaries-section .pagination a', function(e) {
     e.preventDefault();
     $('.pagination li').removeClass('active');
     $(this).parent('li').addClass('active');
@@ -665,7 +665,7 @@ $('.send-comment').click(function (e) {
             notyf.success({
                 message: response.message
             });
-            $('.small-comments-container').html(data.view);
+            $('.small-comments-container').append(data.view);
             $('input[name="comment"]').val('');
         },
         error: (data) => {
@@ -687,42 +687,46 @@ $('.comments').on('click', '.update-comment', function (e) {
 
     $('input[name="comment"]').focus();
     $('.send-comment').addClass('d-none');
-    $('.send-update-comment').removeClass('d-none').click(function (e) {
-        e.preventDefault();
-        let sendData = {
-            comment: $('input[name="comment"]').val(),
-            dictionary_id: $('.send-comment').data('id')
-        };
+    $('.send-update-comment').removeClass('d-none').data('method', method).data('uri', uri);
+});
 
-        $.ajax({
-            url: `${uri}`,
-            type: method,
-            data: {
-                comment: sendData.comment,
-                dictionary_id: sendData.dictionary_id
-            },
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            success: (data) => {
-                console.log(data);
-                let response = data;
-                notyf.success({
-                    message: response.message
-                });
-                $('.small-comments-container').html(data.view);
-                $('.send-update-comment').addClass('d-none');
-                $('.send-comment').removeClass('d-none');
-                $('input[name="comment"]').val("");
-            },
-            error: (data) => {
-                let response = data.responseJSON;
-                console.log(response);
-                notyf.error({
-                    message: response.message
-                });
-            },
-        });
+$('.send-update-comment').click(function (e) {
+    e.preventDefault();
+    let method = $(this).data('method');
+    let uri = $(this).data('uri');
+    let sendData = {
+        comment: $('input[name="comment"]').val(),
+        dictionary_id: $('.send-comment').data('id')
+    };
+
+    $.ajax({
+        url: `${uri}`,
+        type: method,
+        data: {
+            comment: sendData.comment,
+            dictionary_id: sendData.dictionary_id
+        },
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        success: (data) => {
+            console.log(data);
+            let response = data;
+            notyf.success({
+                message: response.message
+            });
+            $(document).find(`.small-comments-container .comment-block[data-id="${data.comment.id}"`).replaceWith(data.view);
+            $('.send-update-comment').addClass('d-none');
+            $('.send-comment').removeClass('d-none');
+            $('input[name="comment"]').val("");
+        },
+        error: (data) => {
+            let response = data.responseJSON;
+            console.log(response);
+            notyf.error({
+                message: response.message
+            });
+        },
     });
 });
 
@@ -748,7 +752,7 @@ $('.comments').on('click', '.delete-comment', function (e) {
             notyf.success({
                 message: response.message
             });
-            $('.small-comments-container').html(data.view);
+            $('.small-comments-container').find(`.comment-block[data-id="${data.comment}"`).remove();
         },
         error: (data) => {
             let response = data.responseJSON;

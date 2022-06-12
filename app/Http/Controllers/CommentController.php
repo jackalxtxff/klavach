@@ -75,15 +75,17 @@ class CommentController extends Controller
             $dictionary = Dictionary::where('id', $request->dictionary_id)
                 ->with(['comments' => function ($query) {
                     return $query->orderBy('created_at', 'DESC')
-                        ->limit(10);
+                        ->when(request()->routeIs('dictionaries.show'), function ($query) {
+                            $query->limit(10);
+                        });
                 }])
                 ->first();
 
             return response()->json([
                 'success' => 'success',
                 'message' => 'Комментарий отправлен!',
-                'view' => view('user.pages.dictionaries.show.components.comments', [
-                    'dictionary' => $dictionary
+                'view' => view('user.pages.dictionaries.show.components.comment', [
+                    'comment' => $comment
                 ])->render()
             ]);
         }
@@ -150,15 +152,18 @@ class CommentController extends Controller
             $dictionary = Dictionary::where('id', $request->dictionary_id)
                 ->with(['comments' => function ($query) {
                     return $query->orderBy('created_at', 'DESC')
-                        ->limit(10);
+                        ->when(request()->routeIs('dictionaries.show'), function ($query) {
+                            $query->limit(10);
+                        });
                 }])
                 ->first();
 
             return response()->json([
                 'success' => 'success',
                 'message' => 'Комментарий изменен!',
-                'view' => view('user.pages.dictionaries.show.components.comments', [
-                    'dictionary' => $dictionary
+                'comment' => $comment,
+                'view' => view('user.pages.dictionaries.show.components.comment', [
+                    'comment' => $comment
                 ])->render()
             ]);
         }
@@ -181,21 +186,23 @@ class CommentController extends Controller
             ], 422);
         }
 
+        $commentId = $comment->id;
+
         if ($comment->delete()) {
 
             $dictionary = Dictionary::where('id', $request->dictionary_id)
                 ->with(['comments' => function ($query) {
                     return $query->orderBy('created_at', 'DESC')
-                        ->limit(10);
+                        ->when(request()->routeIs('dictionaries.show'), function ($query) {
+                            $query->limit(10);
+                        });
                 }])
                 ->first();
 
             return response()->json([
                 'success' => 'success',
                 'message' => 'Комментарий успешно удален!',
-                'view' => view('user.pages.dictionaries.show.components.comments', [
-                    'dictionary' => $dictionary
-                ])->render()
+                'comment' => $commentId
             ]);
         }
         else $message = 'Ошибка при удалении комментария';

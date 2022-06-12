@@ -13,6 +13,7 @@ use App\Models\Stats;
 use App\Models\Type;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -81,6 +82,7 @@ class DictionaryController extends Controller
                         ->join('users', 'dictionaries.user_id', 'users.id')
                         ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                         ->orderBy('stats.' . $column, $direction)
+                        ->select('dictionaries.*')
                         ->paginate($paginate);
                 }
                 //Тип "Любые"
@@ -101,6 +103,7 @@ class DictionaryController extends Controller
                         ->join('users', 'dictionaries.user_id', 'users.id')
                         ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                         ->orderBy('stats.' . $column, $direction)
+                        ->select('dictionaries.*')
                         ->paginate($paginate);
                 }
             }
@@ -120,6 +123,7 @@ class DictionaryController extends Controller
                         ->join('users', 'dictionaries.user_id', 'users.id')
                         ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                         ->orderBy('stats.' . $column, $direction)
+                        ->select('dictionaries.*')
                         ->paginate($paginate);
                 }
                 else {
@@ -136,6 +140,7 @@ class DictionaryController extends Controller
                         ->join('users', 'dictionaries.user_id', 'users.id')
                         ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                         ->orderBy('stats.' . $column, $direction)
+                        ->select('dictionaries.*')
                         ->paginate($paginate);
                 }
             }
@@ -153,7 +158,7 @@ class DictionaryController extends Controller
                             return $query->where('user_id', Auth::id());
                         })
                         ->where('is_publish', 1)
-                        ->where('user_id', '!=', Auth::id())
+//                        ->where('user_id', '!=', Auth::id())
                         ->where(function ($query) use ($request) {
                             $query->where('title', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('description', 'LIKE', '%' . $request->search . '%')
@@ -162,6 +167,7 @@ class DictionaryController extends Controller
                         ->join('users', 'dictionaries.user_id', 'users.id')
                         ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                         ->orderBy('stats.' . $column, $direction)
+                        ->select('dictionaries.*')
                         ->paginate($paginate);
                 }
                 else {
@@ -176,7 +182,7 @@ class DictionaryController extends Controller
                             return $query->where('user_id', Auth::id());
                         })
                         ->where('is_publish', 1)
-                        ->where('user_id', '!=', Auth::id())
+//                        ->where('user_id', '!=', Auth::id())
                         ->where(function ($query) use ($request) {
                             $query->where('title', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('description', 'LIKE', '%' . $request->search . '%')
@@ -185,6 +191,7 @@ class DictionaryController extends Controller
                         ->join('users', 'dictionaries.user_id', 'users.id')
                         ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                         ->orderBy('stats.' . $column, $direction)
+                        ->select('dictionaries.*')
                         ->paginate($paginate);
                 }
             }
@@ -232,6 +239,7 @@ class DictionaryController extends Controller
             ->join('users', 'dictionaries.user_id', 'users.id')
             ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
             ->orderBy('stats.count_games', 'desc')
+            ->select('dictionaries.*')
             ->paginate($paginate);
 
         if ($request->chapter == 'all') {
@@ -253,6 +261,7 @@ class DictionaryController extends Controller
                     ->join('users', 'dictionaries.user_id', 'users.id')
                     ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                     ->orderBy('stats.' . $column, $direction)
+                    ->select('dictionaries.*')
                     ->paginate($paginate);
             }
             else {
@@ -272,6 +281,7 @@ class DictionaryController extends Controller
                     ->join('users', 'dictionaries.user_id', 'users.id')
                     ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                     ->orderBy('stats.' . $column, $direction)
+                    ->select('dictionaries.*')
                     ->paginate($paginate);
             }
         }
@@ -291,6 +301,7 @@ class DictionaryController extends Controller
                     ->join('users', 'dictionaries.user_id', 'users.id')
                     ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                     ->orderBy('stats.' . $column, $direction)
+                    ->select('dictionaries.*')
                     ->paginate($paginate);
             }
             else {
@@ -307,6 +318,7 @@ class DictionaryController extends Controller
                     ->join('users', 'dictionaries.user_id', 'users.id')
                     ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                     ->orderBy('stats.' . $column, $direction)
+                    ->select('dictionaries.*')
                     ->paginate($paginate);
             }
         }
@@ -321,7 +333,7 @@ class DictionaryController extends Controller
                     })
                     ->where('type_id', $request->type)
                     ->where('is_publish', 1)
-                    ->where('user_id', '!=', Auth::id())
+//                    ->where('user_id', '!=', Auth::id())
                     ->whereHas('favorites', function ($query) {
                         return $query->where('user_id', Auth::id());
                     })
@@ -333,6 +345,7 @@ class DictionaryController extends Controller
                     ->join('users', 'dictionaries.user_id', 'users.id')
                     ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                     ->orderBy('stats.' . $column, $direction)
+                    ->select('dictionaries.*')
                     ->paginate($paginate);
             }
             else {
@@ -347,7 +360,7 @@ class DictionaryController extends Controller
                         return $query->where('status_code', 'accept');
                     })
                     ->where('is_publish', 1)
-                    ->where('user_id', '!=', Auth::id())
+//                    ->where('user_id', '!=', Auth::id())
                     ->where(function ($query) use ($request) {
                         $query->where('title', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('description', 'LIKE', '%' . $request->search . '%')
@@ -356,6 +369,7 @@ class DictionaryController extends Controller
                     ->join('users', 'dictionaries.user_id', 'users.id')
                     ->join('stats', 'dictionaries.id', '=', 'stats.dictionary_id')
                     ->orderBy('stats.' . $column, $direction)
+                    ->select('dictionaries.*')
                     ->paginate($paginate);
             }
         }
@@ -418,6 +432,24 @@ class DictionaryController extends Controller
         ]);
     }
 
+    public function formatStr(string $str) {
+        $patterns = [
+            0 => '/«/',
+            1 => '/»/',
+            2 => '/–/',
+            3 => '/—/',
+            4 => '/‒/',
+        ];
+        $replacements = [
+            0 => '"',
+            1 => '"',
+            2 => '-',
+            3 => '-',
+            4 => '-',
+        ];
+        return preg_replace($patterns, $replacements, $str);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -470,16 +502,42 @@ class DictionaryController extends Controller
             $data->type_id = $request->type;
             $data->user_id = Auth::id();
 
+            $text = $this->formatStr($request->text);
+            $characters = 'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя';
+
             if ($request->type === '1') {
-                $text = str_replace(["\n", "\n ", " \n", "  ", "   "], " ", $request->text);
                 $text = str_replace(["\n", "\n ", " \n", "  ", "   "], " ", $text);
+                $text = str_replace(["\n", "\n ", " \n", "  ", "   "], " ", $text);
+//                while(strlen($text) > 300) {
+//                    $text
+//                }
                 $excerpts = array($text);
+                if (str_word_count($excerpts[0], 0, $characters) < 3) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Слишком маленький объем. Минимум 3 слова'
+                    ], 402);
+                }
             }
             elseif ($request->type === '2') {
-                $excerpts = Str::of($request->text)->explode("\n");
+                $excerpts = Str::of($text)->explode("\n");
+                if (count($excerpts) < 3) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Слишком маленький объем. Минимум 3 строки'
+                    ], 402);
+                }
             }
             elseif ($request->type === '3') {
-                $excerpts = Str::of($request->text)->explode("\n\n");
+                $excerpts = Str::of($text)->explode("\n\n");
+                foreach ($excerpts as $excerpt) {
+                    if (strlen($excerpt) < 99) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Слишком маленький объем. Длина каждого текста не менее 100 символов'
+                        ], 402);
+                    }
+                }
             }
             elseif ($request->type === '4') {
                 $file = $request->file;
@@ -504,11 +562,19 @@ class DictionaryController extends Controller
 
             $data->save();
 
-            foreach ($excerpts as $excerpt) {
-                $dataExcerpt = new Excerpt();
-                $dataExcerpt->dictionary_id = $data->id;
-                $dataExcerpt->excerpt = $excerpt;
-                $dataExcerpt->save();
+            try {
+                foreach ($excerpts as $excerpt) {
+                    $dataExcerpt = new Excerpt();
+                    $dataExcerpt->dictionary_id = $data->id;
+                    $dataExcerpt->excerpt = $excerpt;
+                    $dataExcerpt->save();
+                }
+            } catch (\Exception $e) {
+                $data->forceDelete();
+                return response()->json([
+                    'error' => 'error',
+                    'message' => 'Слишком большой словарь! Выберите другой тип'
+                ], 402);
             }
 
             $stats = new Stats();
@@ -547,8 +613,7 @@ class DictionaryController extends Controller
             ->with('user')
             ->with('report')
             ->with(['comments' => function ($query) {
-                return $query->orderBy('created_at', 'DESC')
-                    ->limit(10);
+                return $query->orderBy('created_at', 'ASC');
             }])
             ->with(['favorites' => function ($query) {
                 return $query->where('user_id', Auth::id());
@@ -589,8 +654,7 @@ class DictionaryController extends Controller
             ->with('excerpts')
             ->with('user')
             ->with(['comments' => function ($query) {
-                return $query->orderBy('created_at', 'DESC')
-                    ->limit(10);
+                return $query->orderBy('created_at', 'DESC');
             }])
             ->with(['favorites' => function ($query) {
                 return $query->where('user_id', Auth::id());
@@ -650,6 +714,41 @@ class DictionaryController extends Controller
         return view('user.pages.dictionaries.show.records.dictionary', [
             'dictionary' => $response,
             'records' => $records
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Dictionary  $dictionary
+     * @return \Illuminate\Http\Response
+     */
+    public function showComments(Dictionary $dictionary, Request $request)
+    {
+        $response = Dictionary::where('id', $dictionary->id)
+            ->with('language')
+            ->with('type')
+            ->with('excerpts')
+            ->with('user')
+            ->with(['comments' => function ($query) {
+                return $query->orderBy('created_at', 'ASC');
+            }])
+            ->with(['favorites' => function ($query) {
+                return $query->where('user_id', Auth::id());
+            }])
+            ->with(['grades' => function ($query) {
+                return $query->where('user_id', Auth::id());
+            }])
+            ->first();
+
+        if ($dictionary->is_publish == 0) {
+            if (Auth::id() != $dictionary->user_id) {
+                return abort(403);
+            }
+        }
+
+        return view('user.pages.dictionaries.show.comments.dictionary', [
+            'dictionary' => $response
         ]);
     }
 
@@ -747,16 +846,39 @@ class DictionaryController extends Controller
                 ]);
             }
 
+            $text = $this->formatStr($request->text);
+            $characters = 'АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя';
+
             if ($request->type === '1') {
-                $text = str_replace(["\n", "\n ", " \n", "  ", "   "], " ", $request->text);
+                $text = str_replace(["\n", "\n ", " \n", "  ", "   "], " ", $text);
                 $text = str_replace(["\n", "\n ", " \n", "  ", "   "], " ", $text);
                 $excerpts = array($text);
+                if (str_word_count($excerpts[0], 0, $characters) < 3) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Слишком маленький объем. Минимум 3 слова'
+                    ], 402);
+                }
             }
             elseif ($request->type === '2') {
-                $excerpts = Str::of($request->text)->explode("\n");
+                $excerpts = Str::of($text)->explode("\n");
+                if (count($excerpts) < 3) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Слишком маленький объем. Минимум 3 строки'
+                    ], 402);
+                }
             }
             elseif ($request->type === '3') {
-                $excerpts = Str::of($request->text)->explode("\n\n");
+                $excerpts = Str::of($text)->explode("\n\n");
+                foreach ($excerpts as $excerpt) {
+                    if (strlen($excerpt) < 99) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Слишком маленький объем. Длина каждого текста не менее 100 символов'
+                        ], 402);
+                    }
+                }
             }
             elseif ($request->type === '4') {
                 $file = $request->file;
@@ -779,13 +901,27 @@ class DictionaryController extends Controller
                 }
             }
 
+            $oldExcerpts = Excerpt::where('dictionary_id', $dictionary->id);
             Excerpt::where('dictionary_id', $dictionary->id)->delete();
 
-            foreach ($excerpts as $excerpt) {
-                $dataExcerpt = new Excerpt();
-                $dataExcerpt->dictionary_id = $dictionary->id;
-                $dataExcerpt->excerpt = $excerpt;
-                $dataExcerpt->save();
+            try {
+                foreach ($excerpts as $excerpt) {
+                    $dataExcerpt = new Excerpt();
+                    $dataExcerpt->dictionary_id = $dictionary->id;
+                    $dataExcerpt->excerpt = $excerpt;
+                    $dataExcerpt->save();
+                }
+            } catch (\Exception $e) {
+                foreach ($oldExcerpts as $excerpt) {
+                    $dataExcerpt = new Excerpt();
+                    $dataExcerpt->dictionary_id = $dictionary->id;
+                    $dataExcerpt->excerpt = $excerpt->excerpt;
+                    $dataExcerpt->save();
+                }
+                return response()->json([
+                    'error' => 'error',
+                    'message' => 'Слишком большой словарь! Выберите другой тип'
+                ], 402);
             }
 
             return response()->json([

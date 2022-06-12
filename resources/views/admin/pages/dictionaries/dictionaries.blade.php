@@ -4,85 +4,99 @@
 
 @section('content')
     <section class="main mt-4 admin-wrapper">
-        <div class="container">
+        <div class="container-lg">
             <div class="row dictionaries-section" data-uri="{{route('admin.dictionaries.index')}}">
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-lg-3 mb-3 mb-lg-0">
                     <div class="card p-3 category-container">
                         <div class="card-body">
-                            <div class="list-group mx-0 mb-2">
-                                <h4>Раздел</h4>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="chapter"
-                                           id="listGroupSection1" data-value="new"
-                                           data-uri="{{route('dictionaries.index')}}" value="" checked="">
-                                    <span>
-                                        Новые
-                                    </span>
-                                </label>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="chapter"
-                                           id="listGroupSection2" data-value="accept"
-                                           data-uri="{{route('dictionaries.index')}}" @if(request()->has('chapter') && request()->chapter == "accept") checked @endif>
-                                    <span>
-                                        Принятые
-                                    </span>
-                                </label>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="chapter"
-                                           id="listGroupSection3" data-value="deny"
-                                           data-uri="{{route('dictionaries.index')}}" @if(request()->has('chapter') && request()->chapter == "deny") checked @endif>
-                                    <span>
-                                        Отказанные
-                                    </span>
-                                </label>
+                            <div class="d-grid mb-2">
+                                <p class="m-0">
+                                    <button type="button" class="btn btn-outline-dark me-2 d-lg-none" data-bs-toggle="collapse" data-bs-target="#filter-collapse" aria-controls="filter-collapse">Фильтры</button>
+                                </p>
                             </div>
-                            <div class="list-group mx-0 mb-2">
-                                <h4>Тип</h4>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
-                                           id="listGroupType1" data-value="0" data-uri="{{route('dictionaries.index')}}"
-                                           checked="">
-                                    <span>
-                                        Любые
-                                    </span>
-                                </label>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
-                                           id="listGroupType2" data-value="1"
-                                           data-uri="{{route('dictionaries.index')}}" @if(request()->has('type') && request()->type == 1) checked @endif>
-                                    <span>
-                                        Слова
-                                    </span>
-                                </label>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
-                                           id="listGroupType3" data-value="2"
-                                           data-uri="{{route('dictionaries.index')}}" @if(request()->has('type') && request()->type == 2) checked @endif>
-                                    <span>
-                                        Фразы
-                                    </span>
-                                </label>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
-                                           id="listGroupType4" data-value="3"
-                                           data-uri="{{route('dictionaries.index')}}" @if(request()->has('type') && request()->type == 3) checked @endif>
-                                    <span>
-                                        Тексты
-                                    </span>
-                                </label>
-                                <label class="list-group-item d-flex gap-2">
-                                    <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
-                                           id="listGroupType5" data-value="4"
-                                           data-uri="{{route('dictionaries.index')}}" @if(request()->has('type') && request()->type == 4) checked @endif>
-                                    <span>
-                                        Книги
-                                    </span>
-                                </label>
+                            <div class="collapse d-lg-block" id="filter-collapse">
+                                <div class="list-group mx-0 mb-2">
+                                    <h4>Раздел</h4>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="chapter"
+                                               id="listGroupSection1" data-value="new"
+                                               data-uri="{{route('dictionaries.index')}}" value="" checked="">
+                                        <span>
+                                                                    Новые
+                                                                </span>
+                                    </label>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="chapter"
+                                               id="listGroupSection2" data-value="accept"
+                                               data-uri="{{route('dictionaries.index')}}"
+                                               @if(request()->has('chapter') && request()->chapter == "accept") checked @endif>
+                                        <span>
+                                                                    Принятые
+                                                                </span>
+                                    </label>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="chapter"
+                                               id="listGroupSection3" data-value="deny"
+                                               data-uri="{{route('dictionaries.index')}}"
+                                               @if(request()->has('chapter') && request()->chapter == "deny") checked @endif>
+                                        <span>
+                                                                    Отказанные
+                                                                </span>
+                                    </label>
+                                </div>
+                                <div class="list-group mx-0 mb-2">
+                                    <h4>Тип</h4>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
+                                               id="listGroupType1" data-value="0"
+                                               data-uri="{{route('dictionaries.index')}}"
+                                               checked="">
+                                        <span>
+                                                                    Любые
+                                                                </span>
+                                    </label>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
+                                               id="listGroupType2" data-value="1"
+                                               data-uri="{{route('dictionaries.index')}}"
+                                               @if(request()->has('type') && request()->type == 1) checked @endif>
+                                        <span>
+                                                                    Слова
+                                                                </span>
+                                    </label>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
+                                               id="listGroupType3" data-value="2"
+                                               data-uri="{{route('dictionaries.index')}}"
+                                               @if(request()->has('type') && request()->type == 2) checked @endif>
+                                        <span>
+                                                                    Фразы
+                                                                </span>
+                                    </label>
+                                    <label class="list-group-item d-flex gap-2">
+                                        <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"
+                                               id="listGroupType4" data-value="3"
+                                               data-uri="{{route('dictionaries.index')}}"
+                                               @if(request()->has('type') && request()->type == 3) checked @endif>
+                                        <span>
+                                                                    Тексты
+                                                                </span>
+                                    </label>
+{{--                                    <label class="list-group-item d-flex gap-2">--}}
+{{--                                        <input class="form-check-input flex-shrink-0" type="radio" name="type-sort"--}}
+{{--                                               id="listGroupType5" data-value="4"--}}
+{{--                                               data-uri="{{route('dictionaries.index')}}"--}}
+{{--                                               @if(request()->has('type') && request()->type == 4) checked @endif>--}}
+{{--                                        <span>--}}
+{{--                                                                    Книги--}}
+{{--                                                                </span>--}}
+{{--                                    </label>--}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-9">
+                <div class="col-12 col-lg-9">
                     <h1>Словари</h1>
                     <div class="card p-3">
                         <div class="card-body">

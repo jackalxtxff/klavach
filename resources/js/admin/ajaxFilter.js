@@ -15,7 +15,7 @@ function ajaxFilterAdmin (page= 1) {
         direction: $('input[name="direction"]').is(':checked') ? 'asc' : 'desc',
         page: page
     }
-    let newUri = `${uri}?chapter=${data.chapter}&type=${data.type}&search=${data.search}&page=${data.page}&&direction=${data.direction}`;
+    let newUri = `${uri}?chapter=${data.chapter}&type=${data.type}&search=${data.search}&page=${data.page}&direction=${data.direction}`;
     history.replaceState(null, null, newUri);
     console.log(data, uri, newUri);
 
@@ -43,7 +43,7 @@ function ajaxFilterAdmin (page= 1) {
 }
 
 //Передача страницы в функцию фильтра при нажатии на пагинаторы
-$(document).on('click', '.dictionaries-section .pagination a', function(e) {
+$(document).on('click', '.admin-wrapper .dictionaries-section .pagination a', function(e) {
     e.preventDefault();
     $('.pagination li').removeClass('active');
     $(this).parent('li').addClass('active');

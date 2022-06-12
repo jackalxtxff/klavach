@@ -4,7 +4,7 @@
 
 @section('content')
     <section class="main mt-4">
-        <div class="container">
+        <div class="container-lg">
             <div class="row">
                 <div class="col-12 col-md-6">
                     <h1>Научись набирать текст на клавиатуре вслепую</h1>
@@ -24,7 +24,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12 col-md-6"><h4>Что такое слепая печать?</h4>
+                                    <div class="col-12 col-md-6 mb-3 mb-md-0"><h4>Что такое слепая печать?</h4>
                                         <p class="fs-5">Набор текста вслепую, или набор текста всеми десятью пальцами, не глядя на
                                             клавиатуру,
                                             считается самым эффективным способом научиться печатать на клавиатуре. Научись быстро печатать с
