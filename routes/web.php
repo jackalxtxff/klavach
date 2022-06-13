@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ReportAdminController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\CommentController;
@@ -36,9 +37,7 @@ Route::get('/training', function () {
     return view('user.pages.training.training');
 })->name('training');
 
-Route::get('/rating', function () {
-    return view('user.pages.rating.rating');
-})->name('rating');
+Route::get('/rating', [RatingController::class, 'index'])->name('rating.index');
 
 Route::get('/profile/{name}', [ProfileController::class, 'index'])->name('profile.index');
 //Route::get('/profile/{name}/stats', [ProfileController::class, 'index'])->name('profile.stats');

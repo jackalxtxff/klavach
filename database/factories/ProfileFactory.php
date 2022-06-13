@@ -16,9 +16,12 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'nickname' => $this->faker->unique()->userName(),
             'about' => $this->faker->realText(100),
-            'photo' => $this->faker->imageUrl(640, 480),
+            'record_speed' => $this->faker->randomFloat(null, 0, 900),
+            'avg_speed' => $this->faker->randomFloat(null, 0, 700),
+            'avg_mistakes' => $this->faker->randomFloat(null, 0, 5),
+            'count_games' => $this->faker->randomDigit(),
+            'photo' => $this->faker->unique->imageUrl(400, 400),
             'user_id' => User::factory()->create()->id
         ];
     }

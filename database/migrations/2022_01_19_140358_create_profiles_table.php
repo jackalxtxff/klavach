@@ -21,6 +21,7 @@ class CreateProfilesTable extends Migration
             $table->string('local_photo')->nullable();
             $table->float('record_speed')->nullable()->default(0);
             $table->float('avg_speed')->nullable()->default(0);
+            $table->float('avg_mistakes')->nullable()->default(0);
             $table->integer('count_games')->nullable()->default(0);
             $table->timestamps();
 

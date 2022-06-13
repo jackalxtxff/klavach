@@ -29,10 +29,10 @@
                         <a href="{{route('dictionaries.index')}}"
                            class="nav-link {{request()->routeIs('dictionaries.index') ? 'active' : ''}}">Словари</a>
                     </li>
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('rating')}}"--}}
-{{--                           class="nav-link {{request()->routeIs('rating') ? 'active' : ''}}">Рейтинг</a>--}}
-{{--                    </li>--}}
+                    <li class="nav-item">
+                        <a href="{{route('rating.index')}}"
+                           class="nav-link {{request()->routeIs('rating.index') ? 'active' : ''}}">Рейтинг</a>
+                    </li>
                     @auth()
                         @if(auth()->user()->role == 'admin')
                             <li class="nav-item">

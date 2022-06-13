@@ -108,6 +108,13 @@ class ProfileController extends Controller
             ->orderBy('count', 'desc')
             ->first();
 
+        $profiles = Profile::orderBy('avg_speed', 'DESC')->get();
+        for ($i = 0; $i < count($profiles); $i++) {
+            if ($profiles[$i]->id == $user->id) {
+                $place = $i + 1;
+            }
+        }
+
         if (!isset($countGames)) {
             $favDictionary = [];
         }
@@ -119,6 +126,7 @@ class ProfileController extends Controller
 
         return view('user.pages.profile.profile', [
             'user' => $user,
+            'place' => $place,
             'dictionary' => $favDictionary
         ]);
     }

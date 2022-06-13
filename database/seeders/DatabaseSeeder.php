@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         $data->save();
 
 //        \App\Models\User::factory(50)->create();
-//        \App\Models\Profile::factory(50)->create();
+        \App\Models\Profile::factory(50)->create();
 //        \App\Models\Dictionary::factory(200)->create();
 //        \App\Models\Favorite::factory(400)->create();
 //        \App\Models\Game::factory(400)->create();

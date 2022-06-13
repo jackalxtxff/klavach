@@ -143,7 +143,8 @@ class GameController extends Controller
                 $profile = Profile::where('user_id', Auth::id())->first()->update([
                     'count_games' => Game::where('user_id', Auth::id())->count(),
                     'record_speed' => Game::where('user_id', Auth::id())->max('avg_speed'),
-                    'avg_speed' => Game::where('user_id', Auth::id())->avg('avg_speed')
+                    'avg_speed' => Game::where('user_id', Auth::id())->avg('avg_speed'),
+                    'avg_mistakes' => Game::where('user_id', Auth::id())->avg('percent_mistakes')
                 ]);
 
 //                $stats = Stats::where('dictionary_id', $game->dictionary_id)->first()->update([

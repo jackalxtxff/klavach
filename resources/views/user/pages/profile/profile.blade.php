@@ -48,6 +48,12 @@
                                     <p><span>{{round($user->profile['record_speed'])}}</span> зн/мин</p>
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <label class="col-7 col-sm-4 col-xl-3 col-form-label pt-0">Позиция в рейтинге</label>
+                                <div class="col-5 col-sm-8 col-xl-9">
+                                    <p><span>{{$place}}</span> место</p>
+                                </div>
+                            </div>
                             <div class="row">
                                 <label class="col-7 col-sm-4 col-xl-3 col-form-label pt-0">Любимый словарь</label>
                                 <div class="col-5 col-sm-8 col-xl-9">
